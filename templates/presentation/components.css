@@ -22,7 +22,9 @@ body {
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: none;
+    filter:
+        drop-shadow(1px 2px 3px rgba(0,0,0,0.55))
+        drop-shadow(0 4px 10px rgba(0,0,0,0.30));
 }
 .slide-content h2::after {
     content: '';
@@ -52,6 +54,9 @@ body {
     text-align: center;
     margin: 0 0 1rem;
     letter-spacing: -0.02em;
+    filter:
+        drop-shadow(1px 3px 4px rgba(0,0,0,0.55))
+        drop-shadow(0 6px 16px rgba(0,0,0,0.30));
 }
 .slide-subtitle {
     font-size: 1.05rem;
