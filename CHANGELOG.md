@@ -10,6 +10,9 @@ Format: `## templateName` (H2), `### vX.Y.Z` (H3), bullet points describing chan
 ### v1.0.0
 - Version initiale
 
+### v1.0.1
+- Retravail et optimisation du fichier PROMPT.md
+
 ## presentation
 
 ### v1.0.0
