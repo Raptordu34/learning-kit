@@ -47,6 +47,17 @@ Format: `## templateName` (H2), `### vX.Y.Z` (H3), bullet points describing chan
 
 ## td-exercice
 
+### v1.2.0
+Fichiers modifiés : `templates/td-exercice/index.html`, `templates/td-exercice/print-utils.js` (nouveau)
+
+- Nouveau bouton **⎙ Fiche** dans le toolbar : génère une fiche récap A4 paysage imprimable
+- Extraction automatique des éléments pédagogiques : objectifs, contexte, rappels de cours, exemples guidés, questions+solutions, erreurs fréquentes, tips, méthodes, barème
+- Mise en page 3 colonnes CSS auto-flow, économe en encre (zéro glassmorphism, fond blanc)
+- Solutions dépliées automatiquement dans la fiche (résolution du pattern sibling `.solution`)
+- Mots-clés/thèmes extraits automatiquement des `<code>` de l'énoncé, affichés sous chaque question
+- Points et niveau de difficulté exclus de la fiche (non pertinents pour la relecture)
+- Impression déclenchée automatiquement à l'ouverture de la popup
+
 ### v1.1.0
 Fichiers modifiés : `layouts/sidebar-iframe.css`, `templates/td-exercice/index.html`, `templates/td-exercice/components.css`
 

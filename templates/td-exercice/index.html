@@ -209,6 +209,11 @@
                         ↓ Export
                     </button>
 
+                    <!-- Fiche récap imprimable -->
+                    <button class="toolbar-btn-secondary" onclick="generatePrintSheet()" title="Générer une fiche récap imprimable A4 paysage">
+                        ⎙ Fiche
+                    </button>
+
                     <!-- Révéler toutes les solutions -->
                     <button class="floating-toggle-btn" id="solutions-toggle" onclick="toggleAllSolutions()">
                         ▶ Révéler toutes les solutions
@@ -220,6 +225,7 @@
         </main>
     </div>
 
+    <script src="./print-utils.js" defer></script>
     <script>
         // ── Halo curseur ──────────────────────────────────────────────────
         const halo = document.getElementById('cursor-halo');
