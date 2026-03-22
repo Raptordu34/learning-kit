@@ -221,16 +221,37 @@ ${cardsHtml}`;
 <title>${escHtml(title)} — Fiche récap</title>
 <style>
 /* ── Page ───────────────────────────────────────────────────── */
-@page { size: A4 portrait; margin: 10mm 12mm; }
+@page {
+    size: A4 portrait;
+    margin: 14mm 12mm 12mm 12mm;
+    @top-right {
+        content: "Page " counter(page) " / " counter(pages);
+        font-size: 7pt;
+        font-family: 'Inter', Arial, sans-serif;
+        color: #9ca3af;
+    }
+    @bottom-center {
+        content: "${escHtml(title)} — Fiche récap";
+        font-size: 6.5pt;
+        font-family: 'Inter', Arial, sans-serif;
+        color: #bbb;
+    }
+}
+@page :first {
+    @top-right { content: none; }
+    @bottom-center { content: none; }
+}
 * { box-sizing: border-box; }
 
 body {
     font-family: 'Inter', Arial, Helvetica, sans-serif;
-    font-size: 8.5pt;
-    line-height: 1.45;
+    font-size: 8pt;
+    line-height: 1.3;
     color: #1a1a1a;
     background: #fff;
     margin: 0; padding: 0;
+    orphans: 3;
+    widows: 3;
 }
 
 /* ── En-tête global (hors colonnes) ───────────────────────── */
@@ -247,10 +268,10 @@ body {
 .ph-left p  { font-size: 8pt; color: #555; margin: 0; }
 .ph-date    { font-size: 7pt; color: #999; white-space: nowrap; }
 
-/* ── Zone 3 colonnes ───────────────────────────────────────── */
+/* ── Zone 2 colonnes ───────────────────────────────────────── */
 .print-wrap {
     columns: 2;
-    column-gap: 8mm;
+    column-gap: 6mm;
     column-fill: balance;
 }
 
@@ -261,11 +282,13 @@ body {
     border-left: 4px solid #f97316;
     border-radius: 3px;
     padding: 2mm 4mm;
-    margin: 5mm 0 1.5mm;
+    margin: 3.5mm 0 1.5mm;
     font-size: 9pt;
     font-weight: 700;
     color: #c2440c;
     break-inside: avoid;
+    break-after: avoid;
+    page-break-after: avoid;
 }
 
 /* ── Objectifs pleine largeur (compact) ─────────────────────── */
@@ -275,11 +298,13 @@ body {
     color: #374151;
     border-left: 2.5px solid #0d9488;
     padding: 1.5mm 3mm;
-    margin-bottom: 3mm;
+    margin-bottom: 2mm;
     background: #f0fdfb !important;
     border-radius: 0 3px 3px 0;
     break-inside: avoid;
     page-break-inside: avoid;
+    break-after: avoid;
+    page-break-after: avoid;
 }
 .pc-objectifs-strip strong { color: #0d9488; margin-right: 2mm; }
 .pc-objectifs-strip ul { margin: 1mm 0 0; padding-left: 4mm; }
@@ -290,8 +315,8 @@ body {
     break-inside: avoid;
     page-break-inside: avoid;
     -webkit-column-break-inside: avoid;
-    margin-bottom: 3.5mm;
-    padding: 2.5mm 3.5mm;
+    margin-bottom: 2.5mm;
+    padding: 2mm 3mm;
     border-radius: 3px;
 }
 
@@ -312,14 +337,16 @@ body {
     text-transform: uppercase;
     letter-spacing: 0.8px;
     color: #9ca3af;
-    margin: 0 0 1.5mm;
+    margin: 0 0 1mm;
 }
 
 /* ── Solution ───────────────────────────────────────────────── */
 .pc-sol-wrap {
-    margin-top: 3mm;
+    margin-top: 2mm;
     border-top: 1px solid #e5e7eb;
-    padding-top: 2mm;
+    padding-top: 1.5mm;
+    break-before: avoid;
+    page-break-before: avoid;
 }
 .pc-sol-header {
     display: inline-block;
@@ -339,7 +366,7 @@ body {
     flex-wrap: wrap;
     align-items: center;
     gap: 1.5mm;
-    margin-bottom: 2.5mm;
+    margin-bottom: 2mm;
     padding: 1.5mm 2.5mm;
     background: #fff8f3 !important;
     border-radius: 3px;
@@ -380,18 +407,18 @@ body {
 }
 
 /* ── Typographie ────────────────────────────────────────────── */
-h2 { font-size: 10pt; font-weight: 800; margin: 0 0 1.5mm; }
-h3 { font-size: 9pt;  font-weight: 700; margin: 2mm 0 1mm; }
-h4 { font-size: 8pt;  font-weight: 700; margin: 1.5mm 0 0.75mm; color: #b85c24; }
-p  { margin: 0 0 1mm; }
-ul, ol { margin: 1mm 0; padding-left: 4mm; }
-li { margin-bottom: 0.5mm; }
+h2 { font-size: 10pt; font-weight: 800; margin: 0 0 1mm; break-after: avoid; page-break-after: avoid; }
+h3 { font-size: 9pt;  font-weight: 700; margin: 1.5mm 0 0.8mm; break-after: avoid; page-break-after: avoid; }
+h4 { font-size: 8pt;  font-weight: 700; margin: 1mm 0 0.5mm; color: #b85c24; break-after: avoid; page-break-after: avoid; }
+p  { margin: 0 0 0.8mm; }
+ul, ol { margin: 0.5mm 0; padding-left: 4mm; }
+li { margin-bottom: 0.3mm; }
 strong { font-weight: 700; }
 em { font-style: italic; }
 
 pre, code {
     font-family: 'Courier New', monospace;
-    font-size: 7.5pt;
+    font-size: 7pt;
     background: #f3f4f6 !important;
     border-radius: 2px;
     padding: 1px 3px !important;
@@ -401,8 +428,13 @@ pre {
     padding: 2mm !important;
     white-space: pre-wrap;
     word-break: break-all;
-    margin: 1.5mm 0 !important;
+    overflow-wrap: break-word;
+    margin: 1mm 0 !important;
     border-left: 2px solid #e5e7eb !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    max-height: 120mm;
+    overflow: hidden;
 }
 
 .question-num { font-weight: 800; color: #f97316; margin-right: 1.5mm; }
@@ -415,7 +447,7 @@ pre {
 
 .exo-meta { display: flex; flex-wrap: wrap; gap: 3mm; align-items: center; margin-bottom: 2mm !important; }
 
-table { border-collapse: collapse; width: 100%; font-size: 7.5pt; margin: 1.5mm 0 !important; }
+table { border-collapse: collapse; width: 100%; font-size: 7pt; margin: 1mm 0 !important; break-inside: avoid; page-break-inside: avoid; table-layout: fixed; word-wrap: break-word; }
 th, td { border: 1px solid #d1d5db; padding: 1px 3px; vertical-align: top; }
 th { background: #f3f4f6 !important; font-weight: 700; }
 tr:nth-child(even) { background: #fafafa !important; }
@@ -426,7 +458,7 @@ tr:nth-child(even) { background: #fafafa !important; }
 
 .two-col { columns: 2; column-gap: 3mm; }
 
-.terminal { background: #f3f4f6 !important; border-radius: 3px; padding: 2mm !important; margin: 1.5mm 0 !important; overflow-x: hidden; }
+.terminal { background: #f3f4f6 !important; border-radius: 3px; padding: 2mm !important; margin: 1mm 0 !important; overflow: hidden; break-inside: avoid; page-break-inside: avoid; }
 .terminal-lights { display: none; }
 .prompt { color: #9ca3af; }
 .comment { color: #6b7280; font-style: italic; }
@@ -448,15 +480,32 @@ button:not(.print-btn), .reponse-zone, .hint, .hint-btn, .nav-btn,
     body {
         width: 186mm;
         margin: 0 auto;
-        padding: 10mm 12mm;
+        padding: 14mm 12mm 12mm 12mm;
         background: #fff;
         box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+        background-image: repeating-linear-gradient(
+            to bottom,
+            transparent 0,
+            transparent 271mm,
+            #ef4444 271mm,
+            #ef4444 271.5mm,
+            transparent 271.5mm,
+            transparent 297mm
+        );
+        background-size: 100% 297mm;
+        background-position: top;
     }
     .print-controls {
         width: 186mm;
         margin: 0 auto 12px;
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .print-hint {
+        font-size: 0.75rem;
+        color: #999;
+        font-style: italic;
     }
     .print-btn {
         padding: 8px 18px;
@@ -477,12 +526,18 @@ button:not(.print-btn), .reponse-zone, .hint, .hint-btn, .nav-btn,
 @media print {
     .print-controls { display: none; }
     .print-wrap { column-fill: auto; }
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
 }
 </style>
 </head>
 <body>
 
 <div class="print-controls">
+    <span class="print-hint">Les lignes rouges indiquent les sauts de page approximatifs</span>
     <button class="print-btn" onclick="window.print()">⎙ Imprimer / Enregistrer en PDF</button>
 </div>
 
