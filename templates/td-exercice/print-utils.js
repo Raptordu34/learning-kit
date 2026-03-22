@@ -539,7 +539,7 @@ tr:nth-child(even) { background: #fafafa !important; }
 }
 
 /* ── Masquer les éléments interactifs restants ────────────────── */
-button, .reponse-zone, .hint:not(.rappel-print), .hint-btn, .nav-btn,
+button:not(.print-btn), .reponse-zone, .hint:not(.rappel-print), .hint-btn, .nav-btn,
 .diff-badge, .question-pts, .exo-prereq,
 .pour-aller-plus-loin, .bareme { display: none !important; }
 
