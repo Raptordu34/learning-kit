@@ -109,6 +109,83 @@
             box-shadow: 0 0 6px rgba(52,211,153,0.6);
         }
 
+        /* ── Panneau fiche récap ── */
+        .fiche-panel {
+            position: absolute;
+            top: 56px; right: 24px;
+            z-index: 300;
+            width: 270px;
+            padding: 1rem 1.1rem 1.1rem;
+            border-radius: 16px;
+            display: none;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .fiche-panel.visible { display: flex; }
+
+        @media (max-width: 768px) {
+            .fiche-panel { position: static; width: 100%; border-radius: 0 0 12px 12px; top: auto; right: auto; }
+        }
+
+        .fiche-panel-header {
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 0.85rem; font-weight: 700; color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+        .fiche-panel-close {
+            background: none; border: none; color: var(--text-secondary);
+            font-size: 0.9rem; cursor: pointer; padding: 2px 6px; border-radius: 6px;
+            font-family: inherit;
+        }
+        .fiche-panel-close:hover { background: rgba(255,255,255,0.08); }
+
+        .fiche-panel-section-label {
+            font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 1.5px; color: var(--text-secondary);
+            margin: 0.25rem 0 0.2rem;
+        }
+
+        .fiche-presets {
+            display: flex; gap: 0.4rem; flex-wrap: wrap;
+        }
+        .fiche-presets button {
+            flex: 1; padding: 5px 8px; font-size: 0.78rem; font-weight: 600;
+            font-family: inherit; cursor: pointer; border-radius: 8px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: var(--text-secondary);
+            transition: all 0.15s;
+        }
+        .fiche-presets button:hover { background: rgba(255,255,255,0.13); color: var(--text-primary); }
+        .fiche-presets button.active { background: rgba(249,115,22,0.2); border-color: rgba(249,115,22,0.4); color: #fff7ed; }
+
+        .fiche-checks {
+            display: flex; flex-direction: column; gap: 0.3rem;
+        }
+        .fiche-checks label {
+            display: flex; align-items: center; gap: 0.5rem;
+            font-size: 0.82rem; color: var(--text-secondary);
+            cursor: pointer; padding: 2px 0;
+        }
+        .fiche-checks label:hover { color: var(--text-primary); }
+        .fiche-checks input[type="checkbox"] {
+            width: 14px; height: 14px; accent-color: var(--accent); cursor: pointer; flex-shrink: 0;
+        }
+        .fiche-divider {
+            border: none; border-top: 1px solid rgba(255,255,255,0.08); margin: 0.2rem 0;
+        }
+
+        .fiche-generate-btn {
+            margin-top: 0.4rem; padding: 9px 0; width: 100%;
+            font-size: 0.85rem; font-weight: 700; font-family: inherit;
+            cursor: pointer; border-radius: 10px;
+            background: linear-gradient(160deg, rgba(249,115,22,0.28), rgba(249,115,22,0.12));
+            border: 1px solid rgba(249,115,22,0.4);
+            color: #fff7ed;
+            transition: all 0.2s;
+        }
+        .fiche-generate-btn:hover { background: linear-gradient(160deg, rgba(249,115,22,0.38), rgba(249,115,22,0.2)); }
+
         /* ── Responsive mobile (≤ 768px) ── */
         @media (max-width: 768px) {
             /* Toolbar devient un strip en haut du contenu (pas position absolute) */
@@ -210,7 +287,7 @@
                     </button>
 
                     <!-- Fiche récap imprimable -->
-                    <button class="toolbar-btn-secondary" onclick="generatePrintSheet()" title="Générer une fiche récap imprimable A4 paysage">
+                    <button class="toolbar-btn-secondary" id="fiche-btn" onclick="toggleFichePanel()" title="Générer une fiche récap imprimable A4 paysage">
                         ⎙ Fiche
                     </button>
 
@@ -218,6 +295,39 @@
                     <button class="floating-toggle-btn" id="solutions-toggle" onclick="toggleAllSolutions()">
                         ▶ Révéler toutes les solutions
                     </button>
+                </div>
+
+                <!-- Panneau de filtres fiche récap -->
+                <div class="fiche-panel glass-panel" id="fiche-panel" role="dialog" aria-label="Options de la fiche récap">
+                    <div class="fiche-panel-header">
+                        <span>⎙ Fiche récap</span>
+                        <button class="fiche-panel-close" onclick="toggleFichePanel()" aria-label="Fermer">✕</button>
+                    </div>
+
+                    <p class="fiche-panel-section-label">Presets rapides</p>
+                    <div class="fiche-presets">
+                        <button onclick="applyPreset('all')">Tout</button>
+                        <button onclick="applyPreset('revision')">Révision</button>
+                        <button onclick="applyPreset('entrainement')">Entraînement</button>
+                    </div>
+
+                    <p class="fiche-panel-section-label">Contenu à inclure</p>
+                    <div class="fiche-checks">
+                        <label><input type="checkbox" id="f-objectifs" checked> Objectifs</label>
+                        <label><input type="checkbox" id="f-ctx"       checked> Contexte</label>
+                        <label><input type="checkbox" id="f-rappel"    checked> Rappels de cours</label>
+                        <label><input type="checkbox" id="f-exemple"   checked> Exemples guidés</label>
+                        <hr class="fiche-divider">
+                        <label><input type="checkbox" id="f-question"  checked> Énoncés des questions</label>
+                        <label><input type="checkbox" id="f-solution"  checked> Solutions</label>
+                        <hr class="fiche-divider">
+                        <label><input type="checkbox" id="f-erreur"    checked> Erreurs fréquentes</label>
+                        <label><input type="checkbox" id="f-tip"       checked> Points clés &amp; Tips</label>
+                        <label><input type="checkbox" id="f-callout"   checked> Infos &amp; Analogies</label>
+                        <label><input type="checkbox" id="f-methode"   checked> Méthodes</label>
+                    </div>
+
+                    <button class="fiche-generate-btn" onclick="generateFromPanel()">⎙ Générer la fiche</button>
                 </div>
 
                 <iframe id="content-frame" src="" frameborder="0"></iframe>
@@ -423,6 +533,63 @@
             a.download = 'mes-reponses.txt';
             a.click();
             URL.revokeObjectURL(url);
+        }
+
+        // ── Panneau fiche ──────────────────────────────────────────────
+        const FILTER_KEYS = ['objectifs','ctx','rappel','exemple','question','solution','erreur','tip','callout','methode'];
+
+        function toggleFichePanel() {
+            const panel = document.getElementById('fiche-panel');
+            panel.classList.toggle('visible');
+            if (panel.classList.contains('visible')) loadFilterState();
+        }
+
+        // Fermer si clic en dehors
+        document.addEventListener('click', (e) => {
+            const panel = document.getElementById('fiche-panel');
+            const btn   = document.getElementById('fiche-btn');
+            if (panel?.classList.contains('visible') && !panel.contains(e.target) && e.target !== btn) {
+                panel.classList.remove('visible');
+            }
+        });
+
+        function loadFilterState() {
+            const saved = JSON.parse(localStorage.getItem('td_fiche_filters') || '{}');
+            FILTER_KEYS.forEach(k => {
+                const el = document.getElementById('f-' + k);
+                if (el) el.checked = saved[k] !== false; // true par défaut
+            });
+        }
+
+        function saveFilterState() {
+            const filters = {};
+            FILTER_KEYS.forEach(k => {
+                const el = document.getElementById('f-' + k);
+                if (el) filters[k] = el.checked;
+            });
+            localStorage.setItem('td_fiche_filters', JSON.stringify(filters));
+            return filters;
+        }
+
+        function applyPreset(name) {
+            const presets = {
+                all:          { objectifs:true, ctx:true, rappel:true, exemple:true, question:true, solution:true, erreur:true, tip:true, callout:true, methode:true },
+                revision:     { objectifs:true, ctx:false, rappel:false, exemple:false, question:true, solution:true, erreur:true, tip:true, callout:false, methode:false },
+                entrainement: { objectifs:true, ctx:true, rappel:true, exemple:true, question:true, solution:false, erreur:false, tip:false, callout:false, methode:false },
+            };
+            const p = presets[name] || presets.all;
+            FILTER_KEYS.forEach(k => {
+                const el = document.getElementById('f-' + k);
+                if (el) el.checked = !!p[k];
+            });
+            document.querySelectorAll('.fiche-presets button').forEach(b => b.classList.remove('active'));
+            document.querySelector(`.fiche-presets button[onclick="applyPreset('${name}')"]`)?.classList.add('active');
+        }
+
+        async function generateFromPanel() {
+            const filters = saveFilterState();
+            document.getElementById('fiche-panel')?.classList.remove('visible');
+            await generatePrintSheet(filters);
         }
 
         function restoreProgressDots() {

@@ -47,6 +47,28 @@ Format: `## templateName` (H2), `### vX.Y.Z` (H3), bullet points describing chan
 
 ## td-exercice
 
+### v1.4.0
+Fichiers modifiés : `templates/td-exercice/index.html`, `templates/td-exercice/print-utils.js`
+
+- Nouveau **panneau de filtres** glassmorphism pour la fiche récap (⎙ Fiche ouvre un panneau au lieu de déclencher directement l'impression)
+- 3 presets rapides : **Tout**, **Révision** (objectifs + questions + solutions + erreurs + tips), **Entraînement** (sans solutions ni erreurs ni tips)
+- 10 cases à cocher indépendantes : objectifs, contexte, rappels, exemples guidés, énoncés, solutions, erreurs fréquentes, points clés, infos/analogies, méthodes
+- Fermeture automatique du panneau au clic en dehors
+- Persistance des filtres via `localStorage` (`td_fiche_filters`)
+- Filtrage dans `generatePrintSheet(filters)` : blocs exclus selon les filtres, `.pc-sol-wrap` supprimé si solutions désactivées
+- Responsive : panneau pleine largeur sous le toolbar sur mobile (≤ 768px)
+
+### v1.3.0
+Fichiers modifiés : `templates/td-exercice/print-utils.js`, `templates/td-exercice/index.html`
+
+- Fiche récap : couverture de **toutes les sections** du TD (fetch async + DOMParser, plus limité à l'iframe courante)
+- Feedback visuel pendant le chargement : bouton passe en "⏳ Chargement…" puis revient à "⎙ Fiche"
+- Nouveau layout : en-tête global (titre + date), bandeau orange par section, strip teal pour les objectifs, 3 colonnes pour le reste
+- Solution marquée d'un badge vert "✓ Solution" (remplace le tiret dashed)
+- Barème, points, niveau de difficulté et prérequis supprimés de la fiche
+- Rappels avec fond bleu clair, méthodes avec fond vert clair pour distinction visuelle
+- Système de filtres par type de bloc (préparé pour future UI de configuration)
+
 ### v1.2.0
 Fichiers modifiés : `templates/td-exercice/index.html`, `templates/td-exercice/print-utils.js` (nouveau)
 
