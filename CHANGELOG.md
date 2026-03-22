@@ -47,6 +47,17 @@ Format: `## templateName` (H2), `### vX.Y.Z` (H3), bullet points describing chan
 
 ## td-exercice
 
+### v1.5.0
+Fichiers modifiés : `templates/td-exercice/print-utils.js`
+
+- Format d'impression passé de **A4 paysage** à **A4 portrait** (`@page { size: A4 portrait; margin: 10mm 12mm }`)
+- Mise en page passée de 3 colonnes à **2 colonnes** (gap 8mm, ~89mm par colonne — densité comparable)
+- Suppression de l'auto-déclenchement de `window.print()` : la fiche s'ouvre d'abord en preview, un bouton "⎙ Imprimer / Enregistrer en PDF" permet de lancer l'impression manuellement
+- Preview écran fidèle au rendu imprimé : popup contrainte à `186mm` (largeur contenu A4 portrait), centrée sur fond gris
+- Correction du saut de page parasite après les objectifs : suppression de `break-after: avoid` sur les éléments `column-span: all`, passage à `column-fill: balance` en mode écran et `column-fill: auto` en mode impression via `@media print`
+- En-tête (`.ph`) déplacé à l'intérieur de `.print-wrap` avec `column-span: all` pour que Chrome calcule correctement la hauteur disponible des colonnes
+- Ajout de `-webkit-column-break-inside: avoid` sur `.pc` pour Chrome
+
 ### v1.4.0
 Fichiers modifiés : `templates/td-exercice/index.html`, `templates/td-exercice/print-utils.js`
 

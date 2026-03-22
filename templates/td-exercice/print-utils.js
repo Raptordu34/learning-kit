@@ -221,7 +221,7 @@ ${cardsHtml}`;
 <title>${escHtml(title)} — Fiche récap</title>
 <style>
 /* ── Page ───────────────────────────────────────────────────── */
-@page { size: A4 landscape; margin: 8mm 10mm; }
+@page { size: A4 portrait; margin: 10mm 12mm; }
 * { box-sizing: border-box; }
 
 body {
@@ -235,6 +235,7 @@ body {
 
 /* ── En-tête global (hors colonnes) ───────────────────────── */
 .ph {
+    column-span: all;
     display: flex;
     justify-content: space-between;
     align-items: baseline;
@@ -248,9 +249,9 @@ body {
 
 /* ── Zone 3 colonnes ───────────────────────────────────────── */
 .print-wrap {
-    columns: 3;
-    column-gap: 7mm;
-    column-fill: auto;
+    columns: 2;
+    column-gap: 8mm;
+    column-fill: balance;
 }
 
 /* ── Séparateur de section (pleine largeur) ─────────────────── */
@@ -264,6 +265,7 @@ body {
     font-size: 9pt;
     font-weight: 700;
     color: #c2440c;
+    break-inside: avoid;
 }
 
 /* ── Objectifs pleine largeur (compact) ─────────────────────── */
@@ -276,6 +278,8 @@ body {
     margin-bottom: 3mm;
     background: #f0fdfb !important;
     border-radius: 0 3px 3px 0;
+    break-inside: avoid;
+    page-break-inside: avoid;
 }
 .pc-objectifs-strip strong { color: #0d9488; margin-right: 2mm; }
 .pc-objectifs-strip ul { margin: 1mm 0 0; padding-left: 4mm; }
@@ -285,6 +289,7 @@ body {
 .pc {
     break-inside: avoid;
     page-break-inside: avoid;
+    -webkit-column-break-inside: avoid;
     margin-bottom: 3.5mm;
     padding: 2.5mm 3.5mm;
     border-radius: 3px;
@@ -428,13 +433,60 @@ tr:nth-child(even) { background: #fafafa !important; }
 
 .inline-note { font-size: 7.5pt; color: #6b7280; font-style: italic; border-left: 2px solid #e5e7eb !important; padding-left: 2mm !important; margin: 1mm 0 !important; }
 
-/* Masquer les éléments inutiles à l'impression */
-button, .reponse-zone, .hint, .hint-btn, .nav-btn,
+/* Masquer les éléments interactifs du TD (hors bouton d'impression) */
+button:not(.print-btn), .reponse-zone, .hint, .hint-btn, .nav-btn,
 .diff-badge, .question-pts, .exo-prereq, .pour-aller-plus-loin { display: none !important; }
+
+/* ── Mode écran : simuler la page A4 portrait ───────────────── */
+@media screen {
+    html {
+        background: #6b7280;
+        padding: 20px 16px;
+        min-height: 100vh;
+        box-sizing: border-box;
+    }
+    body {
+        width: 186mm;
+        margin: 0 auto;
+        padding: 10mm 12mm;
+        background: #fff;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+    }
+    .print-controls {
+        width: 186mm;
+        margin: 0 auto 12px;
+        display: flex;
+        justify-content: flex-end;
+    }
+    .print-btn {
+        padding: 8px 18px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        font-family: inherit;
+        cursor: pointer;
+        border-radius: 8px;
+        background: #1a1a1a;
+        color: #fff;
+        border: none;
+        transition: background 0.15s;
+    }
+    .print-btn:hover { background: #333; }
+}
+
+/* ── Mode impression ───────────────────────────────────────── */
+@media print {
+    .print-controls { display: none; }
+    .print-wrap { column-fill: auto; }
+}
 </style>
 </head>
 <body>
 
+<div class="print-controls">
+    <button class="print-btn" onclick="window.print()">⎙ Imprimer / Enregistrer en PDF</button>
+</div>
+
+<div class="print-wrap">
 <header class="ph">
     <div class="ph-left">
         <h1>${escHtml(title)}</h1>
@@ -442,23 +494,16 @@ button, .reponse-zone, .hint, .hint-btn, .nav-btn,
     </div>
     <span class="ph-date">Fiche récap · ${today}</span>
 </header>
-
-<div class="print-wrap">
 ${sectionsHtml}
 </div>
 
-<script>
-    window.addEventListener('load', function() {
-        setTimeout(function() { window.print(); }, 500);
-    });
-</script>
 </body>
 </html>`;
 }
 
 /* ── Ouverture de la fenêtre popup ──────────────────────────────── */
 function openPrintWindow(html) {
-    const win = window.open('', '_blank', 'width=1280,height=900,scrollbars=yes');
+    const win = window.open('', '_blank', 'width=780,height=960,scrollbars=yes');
     if (!win) {
         alert('La popup a été bloquée. Autorisez les popups pour ce site puis réessayez.');
         return;
