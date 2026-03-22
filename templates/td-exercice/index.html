@@ -327,6 +327,13 @@
                         <label><input type="checkbox" id="f-methode"   checked> Méthodes</label>
                     </div>
 
+                    <p class="fiche-panel-section-label">Mode couleur</p>
+                    <div class="fiche-presets">
+                        <button class="color-mode-btn active" onclick="selectColorMode('neutre', this)">Neutre</button>
+                        <button class="color-mode-btn" onclick="selectColorMode('sobre', this)">Sobre</button>
+                        <button class="color-mode-btn" onclick="selectColorMode('couleur', this)">Couleur</button>
+                    </div>
+
                     <button class="fiche-generate-btn" onclick="generateFromPanel()">⎙ Générer la fiche</button>
                 </div>
 
@@ -541,7 +548,10 @@
         function toggleFichePanel() {
             const panel = document.getElementById('fiche-panel');
             panel.classList.toggle('visible');
-            if (panel.classList.contains('visible')) loadFilterState();
+            if (panel.classList.contains('visible')) {
+                loadFilterState();
+                loadColorModeState();
+            }
         }
 
         // Fermer si clic en dehors
@@ -586,10 +596,27 @@
             document.querySelector(`.fiche-presets button[onclick="applyPreset('${name}')"]`)?.classList.add('active');
         }
 
+        let selectedColorMode = localStorage.getItem('td_fiche_colorMode') || 'neutre';
+
+        function selectColorMode(mode, btn) {
+            selectedColorMode = mode;
+            localStorage.setItem('td_fiche_colorMode', mode);
+            document.querySelectorAll('.color-mode-btn').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+        }
+
+        function loadColorModeState() {
+            const mode = localStorage.getItem('td_fiche_colorMode') || 'neutre';
+            selectedColorMode = mode;
+            document.querySelectorAll('.color-mode-btn').forEach(b => {
+                b.classList.toggle('active', b.textContent.trim().toLowerCase() === mode);
+            });
+        }
+
         async function generateFromPanel() {
             const filters = saveFilterState();
             document.getElementById('fiche-panel')?.classList.remove('visible');
-            await generatePrintSheet(filters);
+            await generatePrintSheet(filters, selectedColorMode);
         }
 
         function restoreProgressDots() {

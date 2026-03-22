@@ -47,6 +47,45 @@ Format: `## templateName` (H2), `### vX.Y.Z` (H3), bullet points describing chan
 
 ## td-exercice
 
+### v2.0.0
+Fichiers modifiés : `templates/td-exercice/print-utils.js` (réécriture complète), `templates/td-exercice/index.html`
+
+> **Important :** Cette version réécrit entièrement la logique d'impression. Si vous avez des documents existants basés sur le template `td-exercice`, **relisez les fichiers modifiés dans le template source** (`print-utils.js` et `index.html`) pour synchroniser vos instances.
+
+#### Refonte de la logique d'impression — sections complètes
+- **Abandon de l'extraction par blocs** : l'ancien système découpait chaque section en blocs individuels (objectifs, contexte, questions…) et les réassemblait dans un layout 2 colonnes condensé. Le nouveau système **injecte le HTML complet de chaque section** tel quel, conservant la mise en page d'origine
+- **Saut de page entre sections** : chaque nouvelle section commence sur une page vierge (`page-break-before: always`), sauf la première
+- **Nettoyage DOM** au lieu d'extraction : `cleanSectionForPrint()` remplace `extractBlocks()` + `cleanElement()`. Supprime les éléments interactifs (boutons, zones de réponse, hints/indices, scripts, SVG, barème, "pour aller plus loin") directement dans le DOM cloné de chaque section
+
+#### Correction des rappels de cours manquants
+- **Bug corrigé** : les rappels de cours et rappels approfondis utilisent le mécanisme `.hint-btn` + `.hint` (comme les indices), pas les classes `.rappel-cours`/`.rappel-long`. L'ancien code supprimait tous les `.hint` aveuglément → les rappels disparaissaient même avec le filtre "Tout"
+- **Nouvelle logique** : chaque `.hint-btn` est analysé par son `data-label`. Si il contient "Rappel", le `.hint` associé est conservé, rendu visible, et annoté avec la classe `.rappel-print` + un titre. Les autres `.hint` (indices de questions) restent supprimés
+
+#### Modes couleur (nouveau)
+- **Sélecteur "Mode couleur"** ajouté dans le panneau fiche récap (`index.html`) : 3 boutons sous la section des filtres
+  - **Neutre** : palette entièrement grise (bordures `#555`–`#aaa`), idéal pour l'impression N&B et l'économie d'encre
+  - **Sobre** : couleurs atténuées/terreuses (orange doux `#c08050`, vert olive `#7aaa7a`, bleu gris `#6a9ac0`) — compromis lisibilité/encre
+  - **Couleur** : palette d'origine du design system (orange `#f97316`, vert `#22c55e`, bleu `#3b82f6`, violet `#8b5cf6`)
+- Persistance du choix en `localStorage` (`td_fiche_colorMode`)
+- Le mode couleur est passé à `generatePrintSheet(filters, colorMode)` et injecté dans le CSS via l'objet `COLOR_THEMES`
+
+#### Changements dans `index.html`
+- **Nouveau bloc HTML** dans `.fiche-panel` : label "Mode couleur" + 3 boutons (`Neutre`, `Sobre`, `Couleur`) réutilisant le style `.fiche-presets` existant, avec classe `.color-mode-btn` pour le ciblage JS
+- **Nouvelles fonctions JS** :
+  - `selectColorMode(mode, btn)` — met à jour la sélection et persiste en localStorage
+  - `loadColorModeState()` — restaure l'état à l'ouverture du panel
+  - Variable `selectedColorMode` initialisée depuis localStorage (défaut: `'neutre'`)
+- **`toggleFichePanel()`** appelle désormais aussi `loadColorModeState()` à l'ouverture
+- **`generateFromPanel()`** passe `selectedColorMode` comme second argument à `generatePrintSheet()`
+
+#### Changements dans `print-utils.js` (réécriture complète)
+- Fonctions supprimées : `extractBlocks()`, `cleanElement()`, `extractKeywords()`
+- Fonction ajoutée : `cleanSectionForPrint(doc, filters)` — nettoyage DOM complet avec distinction rappels/indices
+- Objet `COLOR_THEMES` avec 3 palettes complètes (neutre, sobre, couleur) couvrant tous les composants
+- `buildPrintHTML()` accepte `colorMode`, injecte les couleurs du thème dans le CSS généré
+- Layout simplifié : plus de `.print-wrap` 2 colonnes, plus de `.pc-*` cards — le HTML des sections est injecté directement
+- CSS neutre par défaut : fond blanc, pas de glassmorphism, bordures légères, police 9.5pt
+
 ### v1.6.0
 Fichiers modifiés : `templates/td-exercice/print-utils.js`
 
