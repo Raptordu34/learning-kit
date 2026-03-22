@@ -108,6 +108,54 @@
             border-radius: 50%;
             box-shadow: 0 0 6px rgba(52,211,153,0.6);
         }
+
+        /* ── Responsive mobile (≤ 768px) ── */
+        @media (max-width: 768px) {
+            /* Toolbar devient un strip en haut du contenu (pas position absolute) */
+            .content-toolbar {
+                position: relative;
+                top: auto; right: auto;
+                width: 100%;
+                box-sizing: border-box;
+                padding: 0.5rem 0.75rem;
+                border-bottom: 1px solid rgba(255,255,255,0.08);
+                background: rgba(38,38,36,0.6);
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+                flex-shrink: 0;
+                flex-wrap: wrap;
+                row-gap: 0.4rem;
+                border-radius: var(--radius-lg, 24px) var(--radius-lg, 24px) 0 0;
+            }
+
+            /* Boutons secondaires compacts */
+            .toolbar-btn-secondary {
+                padding: 6px 10px;
+                font-size: 0.78rem;
+            }
+
+            /* Timer compact */
+            .timer-display {
+                padding: 6px 10px;
+                font-size: 0.78rem;
+            }
+
+            /* Solutions toggle compact (texte court injecté par JS) */
+            .floating-toggle-btn {
+                padding: 6px 12px;
+                font-size: 0.78rem;
+                border-radius: 14px;
+            }
+
+            /* Save badge masqué (économie d'espace) */
+            .save-badge { display: none; }
+
+            /* L'iframe prend tout l'espace restant dans content-wrapper flex-column */
+            #content-frame {
+                flex: 1;
+                min-height: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -246,10 +294,13 @@
 
         function updateToggleBtn() {
             const btn = document.getElementById('solutions-toggle');
+            const mobile = window.innerWidth <= 768;
             btn.innerHTML = solutionsRevealed
-                ? '▼ Masquer les solutions'
-                : '▶ Révéler toutes les solutions';
+                ? (mobile ? '▼ Masquer' : '▼ Masquer les solutions')
+                : (mobile ? '▶ Solutions' : '▶ Révéler toutes les solutions');
         }
+
+        window.addEventListener('resize', updateToggleBtn);
 
         // ── Effacer les réponses (avec confirmation) ──────────────────────
         function clearAnswers() {

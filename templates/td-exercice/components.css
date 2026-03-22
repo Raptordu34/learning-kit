@@ -775,3 +775,64 @@ pre code {
     margin-top: 0.5rem;
     font-style: italic;
 }
+
+/* ─── Responsive mobile (≤ 768px) ─────────────────────────────── */
+@media (max-width: 768px) {
+
+    /* Padding body des sections */
+    body { padding: 1.25rem 1rem 2.5rem; }
+
+    /* Headings */
+    h2 { font-size: 1.8rem !important; }
+    h3 { font-size: 1.3rem !important; }
+
+    /* Grille 2 colonnes → 1 colonne */
+    .two-col { grid-template-columns: 1fr; gap: 1rem; }
+
+    /* Barème 3 colonnes → empilé avec accent color */
+    .bareme { grid-template-columns: 1fr; gap: 0; }
+    .bareme-header { display: none; }
+    .bareme-row {
+        grid-template-columns: auto 1fr;
+        gap: 0.4rem 0.75rem;
+        border-left: 3px solid var(--accent);
+        padding: 0.75rem;
+        margin-bottom: 0.5rem;
+        border-radius: var(--radius-sm);
+        background: rgba(255,255,255,0.03);
+    }
+    .bareme-row .pts { font-weight: 700; color: var(--accent); }
+
+    /* Metadata exercice → wrap */
+    .exo-meta { flex-wrap: wrap; gap: 0.4rem; }
+
+    /* Tableaux → scroll horizontal */
+    .table-glass { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .table-glass table { min-width: 480px; }
+
+    /* Terminal → scroll horizontal */
+    .terminal { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+    /* Pre/code → scroll horizontal + taille réduite */
+    pre {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        font-size: 0.82rem;
+    }
+
+    /* Blocs principaux : padding réduit */
+    .exo-header { padding: 1.25rem; }
+    .question { padding: 1rem 1rem 1rem 1.25rem; }
+    .highlight-box { padding: 0.875rem 1rem; }
+    .callout-info { padding: 0.875rem 1rem; }
+    .pour-aller-plus-loin { padding: 1.25rem; }
+
+    /* Steps : espacement tactile confortable */
+    .steps li { padding: 0.6rem 0; }
+
+    /* Solution dépliée : max-height plus grande (contenu plus étroit = plus de hauteur) */
+    .solution--visible { max-height: 12000px; }
+
+    /* Zone réponse : min-height plus grand pour clavier tactile */
+    .reponse-zone { min-height: 80px; }
+}
